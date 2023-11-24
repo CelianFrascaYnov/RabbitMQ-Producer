@@ -1,0 +1,27 @@
+version: '3'
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    networks:
+      - mon_reseau
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: rabbitmq
+      RABBITMQ_DEFAULT_PASS: rabbitmq
+    volumes:
+      - "./rabbitmq_data:/var/lib/rabbitmq"
+  tp-app-producer:
+    build: .
+    ports:
+      - "8080:8080"
+    networks:
+      - mon_reseau
+    depends_on:
+      - rabbitmq
+
+networks:
+  mon_reseau:
+    external: true
